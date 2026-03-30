@@ -13,3 +13,12 @@ db = SQLAlchemy(app)
 login_manager = LoginManager(app)
 login_manager.login_view = 'login'
 
+class User(db.Model, UserMixin):
+                id = db.Column(db.Integer, primary_key=True)
+                username = db.Column(db.String(80), unique=True, nullable=False)
+                email = db.Column(db.String(120), unique=True, nullable=False)
+                password = db.Column(db.String(200), nullable=False)
+                entries = db.relationship('Entry', backref='owner', lazy=True)
+
+class Entry(db.Model):
+                
