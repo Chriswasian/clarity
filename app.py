@@ -30,4 +30,6 @@ class Entry(db.Model):
                 created_at = db.Column(db.DateTime, default=datetime.utcnow)
                 user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
         
-                
+@login_manager.user_loader
+def load_user(user_id):
+    return User.query.get(int(user_id))
