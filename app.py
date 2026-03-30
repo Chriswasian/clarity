@@ -3,6 +3,7 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager, UserMixin, login_user, logout_user, login_required, current_user
 from werkzeug.security import generate_password_hash, check_password_hash
 import os
+from datetime import datetime
 
 app = Flask(__name__)
 
@@ -21,4 +22,12 @@ class User(db.Model, UserMixin):
                 entries = db.relationship('Entry', backref='owner', lazy=True)
 
 class Entry(db.Model):
+                id = db.Column(db.Integer, primary_key=True)
+                content = db.Column(db.Text, nullable=False)
+                mode = db.Column(db.String(10), default="Personal")
+                ai = db.Column(db.Text, nullable=True)
+                mood = db.Column(db.Integer, nullable=True)
+                created_at = db.Column(db.DateTime, default=datetime.utcnow)
+                user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+        
                 
