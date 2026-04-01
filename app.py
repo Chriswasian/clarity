@@ -72,5 +72,22 @@ def logout():
 @app.route('/dashboard')
 @login_required
 def dashboard():
+       entries = Entry.query.filter_by(user_id=current_user.id).all()
+       return render_template('dashboard.html', entries=entries)
+
+@app.route('/new_entry', methods=['GET', 'POST'])
+@login_required
+def new_entry():
+       if request.method == 'POST':
+            content = request.form.get('content')
+            mode = request.form.get('mode')
+            mood = request.form.get('mood')
+            ai_response = "AI response coming soon"
+            new_entry = Entry(content=content, mode=mode, mood=mood, ai=ai_response, user_id=current_user.id)
+            db.session.add(new_entry)
+            db.session.commit()
+            return redirect(url_for('entry', id=new_entry.id))
+       return render_template('new_entry.html')
+            
 
         
