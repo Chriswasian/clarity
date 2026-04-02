@@ -99,7 +99,18 @@ def entry(id):
        else:
               flash('You do not have permission to view this entry')
               return redirect(url_for('dashboard'))
-       
-            
 
+@app.route('/entries')
+@login_required
+def entries():
+       entries = Entry.query.filter_by(user_id=current_user.id).all()
+       return render_template('entries.html', entries=entries)
+
+if __name__ == '__main__':
+     with app.app_context():
+        db.create_all()
+        app.run(debug=True) 
+
+       
+       
         
