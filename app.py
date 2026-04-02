@@ -88,6 +88,18 @@ def new_entry():
             db.session.commit()
             return redirect(url_for('entry', id=new_entry.id))
        return render_template('new_entry.html')
+
+@app.route('/entry/<int:id>')
+@login_required
+def entry(id):
+       entry = Entry.query.get_or_404(id)
+       user_id = entry.user_id
+       if user_id == current_user.id:
+              return render_template('entry.html', entry=entry)
+       else:
+              flash('You do not have permission to view this entry')
+              return redirect(url_for('dashboard'))
+       
             
 
         
