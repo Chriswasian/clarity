@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,600;0,700;1,400&family=Nunito:wght@400;600;700;800&display=swap"
+        rel="stylesheet">
+    <title>{% block title %}Clarity - Balance your worlds.{% endblock %}</title>
+</head>
+
+<body>
+    <nav>
+        {% if current_user.is_authenticated %}
+        <a href="{{ url_for('dashboard') }}">Dashboard</a>
+        <a href="{{ url_for('new_entry') }}">Entry</a>
+        <a href="{{ url_for('ai') }}">Chat</a>
+        <a href="{{ url_for('entries') }}">Past Entries</a>
+        <a href="{{ url_for('logout') }}">Logout</a>
+        {% else %}
+        <a href="{{ url_for('register') }}">Register</a>
+        <a href="{{ url_for('login') }}">Login</a>
+        {% endif %}
+    </nav>
+    <!-- navigation -->
+
+    <main>{% block content %}{% endblock %}<!-- page content goes here --></main>
+
+</body>
