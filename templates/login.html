@@ -1,4 +1,21 @@
-{% extends "base.html" %}
+{% extends 'base.html' %}
+{% block title %}Login — Clarity - Balance your worlds{% endblock %}
+
 {% block content %}
-<h1>This content is pushed into base.html</h1>
+<h2>Login</h2>
+<form method="POST">
+    <div>
+        <label>Username</label><br>
+        <input type="text" name="username" required>
+    </div>
+    <br>
+    <div>
+        <label>Password</label><br>
+        <input type="password" name="password" required>
+    </div>
+    <br>
+    <button type="submit">Login</button>
+</form>
+<br>
+<p>Don't have an account? <a href="{{ url_for('register') }}">Register here</a></p>
 {% endblock %}
