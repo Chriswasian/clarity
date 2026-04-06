@@ -1,0 +1,10 @@
+{% extends 'base.html' %}
+{% block title %}Dashboard - Clarity - Balance your worlds{% endblock %}
+{% block content %}
+<h1>Welcome {{ current_user.username }}, to your Dashboard</h1>
+{% if latest_entry %}
+<!-- show the entry -->
+{% else %}
+<p>No entries yet. Start writing!</p>
+{% endif %}
+{% endblock%}
