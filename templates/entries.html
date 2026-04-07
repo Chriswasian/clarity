@@ -1,0 +1,10 @@
+{% extends 'base.html' %}
+{% block title %}Entries - Clarity - Balance your worlds{% endblock %}
+{% block content %}
+{% for entry in entries %}
+<p><a href="{{ url_for('entry', id=entry.id) }}">{{ entry.content }}</a></p>
+{% else %}
+<p>No entries yet!</p>
+{% endfor %}
+<p><a href="{{ url_for('new_entry') }}">Start writing!</a> </p>
+{% endblock %}
