@@ -72,8 +72,8 @@ def logout():
 @app.route('/dashboard')
 @login_required
 def dashboard():
-       entries = Entry.query.filter_by(user_id=current_user.id).all()
-       return render_template('dashboard.html', entries=entries)
+    entries = Entry.query.filter_by(user_id=current_user.id).order_by(Entry.created_at.desc()).first()
+    return render_template('dashboard.html', latest_entry=entries)
 
 @app.route('/new_entry', methods=['GET', 'POST'])
 @login_required
