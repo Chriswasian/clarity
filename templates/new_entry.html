@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+{% block title %}New Entry - Clarity - Balance your worlds{% endblock %}
+{% block content %}
+<form method="POST">
+
+    <label>Mood (1-10)</label>
+    <br>
+    <label>Mode</label>
+    <select name="mode">
+        <option value="work">work</option>
+        <option value="personal">personal</option>
+    </select>
+    <br>
+    <input type="number" name="mood" min="1" max="10">
+    <br><label>What's on your mind?</label>
+    <textarea name="content"></textarea>
+    <br><br>
+    <button type="submit">Submit</button>
+
+</form>

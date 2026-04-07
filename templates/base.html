@@ -16,7 +16,7 @@
         {% if current_user.is_authenticated %}
         <a href="{{ url_for('dashboard') }}">Dashboard</a>
         <a href="{{ url_for('new_entry') }}">Entry</a>
-        <a href="{{ url_for('ai') }}">Chat</a>
+        {# <a href="{{ url_for('ai') }}">Chat</a> #}
         <a href="{{ url_for('entries') }}">Past Entries</a>
         <a href="{{ url_for('logout') }}">Logout</a>
         {% else %}
