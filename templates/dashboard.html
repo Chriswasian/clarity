@@ -3,11 +3,13 @@
 {% block content %}
 <h1>Welcome {{ current_user.username }}, to your Dashboard</h1>
 {% if latest_entry %}
-<p>{{ latest_entry.content }}</p>
-<p>{{ latest_entry.mood }}</p>
-<p>{{ latest_entry.ai }}</p>
+<div class="entry-card">
+    <p>{{ latest_entry.content }}</p>
+    <p>{{ latest_entry.mood }}</p>
+    <p>{{ latest_entry.ai }}</p>
+</div>
 {% else %}
 <p>No entries yet!</p>
 {% endif %}
-<p><a href="{{ url_for('new_entry') }}">Start writing!</a> </p>
+<p><a href="{{ url_for('new_entry') }}" class="btn">Start Writing</a> </p>
 {% endblock%}

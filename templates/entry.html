@@ -1,9 +1,14 @@
 {% extends 'base.html' %}
 {% block title %}Entry - Clarity - Balance your worlds{% endblock %}
 {% block content %}
-<p>{{ entry.created_at }}</p>
-<p>{{ entry.mode }}</p>
-<p>{{ entry.content }}</p>
-<p>{{ entry.mood }}</p>
-<p>{{ entry.ai }}</p>
+<div class="entry-card">
+    <h2>{{ entry.created_at.strftime('%B %d, %Y') }}</h2>
+    <div class="entry-meta">
+        <span class="mode-badge">{{ entry.mode }}</span>
+        <span class="mood-badge">Mood: {{ entry.mood }}/10</span>
+        {{ entry.created_at.strftime('%I:%M %p') }}
+    </div>
+    <div class="entry-content">{{ entry.content }}</div>
+    <div class="ai-response">{{ entry.ai }}</div>
+</div>
 {% endblock %}

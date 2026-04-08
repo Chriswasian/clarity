@@ -101,3 +101,98 @@ button {
 button:hover {
     background-color: var(--brown-mid);
 }
+
+.entry-card {
+    background-color: var(--white);
+    border-radius: 12px;
+    padding: 24px;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+    margin: 24px 0;
+}
+
+.entry-card p {
+    margin: 8px 0;
+    line-height: 1.7;
+}
+
+.btn {
+    display: inline-block;
+    background-color: var(--brown-dark);
+    color: var(--white);
+    padding: 10px 24px;
+    border-radius: 8px;
+    text-decoration: none;
+
+    font-family: 'Nunito', sans-serif;
+    font-weight: 700;
+}
+
+.btn:hover {
+    background-color: var(--brown-mid);
+    color: var(--white);
+}
+
+/* Entry page — single journal entry view */
+.entry-meta {
+    font-family: 'Nunito', sans-serif;
+    font-size: 0.85em;
+    color: var(--brown-mid);
+    margin-bottom: 16px;
+}
+
+.entry-content {
+    font-size: 1.05em;
+    line-height: 1.8;
+    margin-bottom: 24px;
+}
+
+.ai-response {
+    background-color: var(--cream);
+    border-left: 4px solid var(--sage);
+    padding: 16px 20px;
+    border-radius: 0 8px 8px 0;
+    font-style: italic;
+    line-height: 1.7;
+    margin-top: 20px;
+}
+
+.ai-response::before {
+    content: "✨ Clarity says:";
+    display: block;
+    font-style: normal;
+
+    font-family: 'Nunito', sans-serif;
+    font-weight: 800;
+    color: var(--brown-dark);
+    margin-bottom: 8px;
+}
+
+textarea {
+    min-height: 180px;
+    resize: vertical;
+}
+
+.mood-badge {
+    display: inline-block;
+    background-color: var(--sage);
+    color: var(--white);
+
+    padding: 3px 10px;
+    border-radius: 20px;
+    font-family: 'Nunito', sans-serif;
+    font-size: 0.8em;
+    font-weight: 700;
+    margin-right: 8px;
+}
+
+.mode-badge {
+    display: inline-block;
+    background-color: var(--brown-mid);
+    color: var(--white);
+    padding: 3px 10px;
+    border-radius: 20px;
+    font-family: 'Nunito', sans-serif;
+
+    font-size: 0.8em;
+    font-weight: 700;
+}
