@@ -4,6 +4,7 @@ from flask_login import LoginManager, UserMixin, login_user, logout_user, login_
 from werkzeug.security import generate_password_hash, check_password_hash
 import os
 from datetime import datetime
+from groq import Groq
 
 app = Flask(__name__)
 
@@ -82,7 +83,11 @@ def new_entry():
             content = request.form.get('content')
             mode = request.form.get('mode')
             mood = request.form.get('mood')
-            ai_response = "AI response coming soon"
+            groq_client = Groq(api_key=os.getenv("GROQ_API_KEY"))
+            chat = groq_client.chat.completions.create(
+            model="llama-3.1-8b-instant",
+            messages=[{"role": "user", "content": f"You are Clarity, a warm and supportive AI journaling companion. The user wrote this journal entry (mode: {mode}, mood: {mood}/10): \"{content}\". Respond with a short, empathetic, thoughtful reflection in 2-3 sentences."}])
+            ai_response = chat.choices[0].message.content
             new_entry = Entry(content=content, mode=mode, mood=mood, ai=ai_response, user_id=current_user.id)
             db.session.add(new_entry)
             db.session.commit()
