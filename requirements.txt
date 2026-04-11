@@ -4,3 +4,4 @@ flask-login
 werkzeug
 python-dotenv
 groq
+gunicorn
