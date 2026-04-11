@@ -196,3 +196,17 @@ textarea {
     font-size: 0.8em;
     font-weight: 700;
 }
+
+.btn-danger {
+    background-color: #e05252;
+}
+
+.btn-danger:hover {
+    background-color: #c04040;
+}
+
+.btn-danger-form {
+    display: inline;
+    margin: 0;
+    padding: 0;
+}

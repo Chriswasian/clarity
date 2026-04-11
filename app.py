@@ -110,6 +110,30 @@ def entry(id):
        else:
               flash('You do not have permission to view this entry')
               return redirect(url_for('dashboard'))
+       
+@app.route('/entry/<int:id>/edit', methods=['GET', 'POST'])
+@login_required
+def edit_entry(id):
+        entry = Entry.query.get_or_404(id)
+        if entry.user_id != current_user.id:
+            return redirect(url_for('dashboard'))
+        if request.method == 'POST':
+            entry.content = request.form.get('content')
+            entry.mode = request.form.get('mode')
+            entry.mood = request.form.get('mood')
+            db.session.commit()
+            return redirect(url_for('entry', id=entry.id))
+        return render_template('edit_entry.html', entry=entry)
+
+@app.route('/entry/<int:id>/delete', methods=['POST'])
+@login_required
+def delete_entry(id):
+        entry = Entry.query.get_or_404(id)
+        if entry.user_id != current_user.id:
+            return redirect(url_for('dashboard'))
+        db.session.delete(entry)
+        db.session.commit()
+        return redirect(url_for('entries'))
 
 @app.route('/entries')
 @login_required
