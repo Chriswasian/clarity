@@ -8,7 +8,7 @@ from groq import Groq
 
 app = Flask(__name__)
 
-app.config['SECRET_KEY'] = os.urandom(24)
+app.config['SECRET_KEY'] = os.getenv('SECRET_KEY', 'clarity-dev-secret')
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///clarity.db'
 db = SQLAlchemy(app)
 with app.app_context():
