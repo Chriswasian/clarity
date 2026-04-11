@@ -37,6 +37,10 @@ class Entry(db.Model):
 def load_user(user_id):
     return User.query.get(int(user_id))
 
+@app.route('/')
+def index():
+    return redirect(url_for('login'))
+
 @app.route('/register', methods=['GET', 'POST'])
 def register():
         if request.method == 'POST':
@@ -119,6 +123,6 @@ if __name__ == '__main__':
         port = int(os.environ.get('PORT', 5000))
         app.run(host='0.0.0.0', port=port, debug=True)
 
-       
+
        
         
