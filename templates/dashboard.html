@@ -4,8 +4,13 @@
 <h1>Welcome {{ current_user.username }}, to your Dashboard</h1>
 {% if latest_entry %}
 <div class="entry-card">
+    <h4>Latest Entry</h4>
     <p>{{ latest_entry.content }}</p>
+    <h4>Mode</h4>
+    <p>{{ latest_entry.mode }}</p>
+    <h4>Mood</h4>
     <p>{{ latest_entry.mood }}</p>
+    <h4>AI Response</h4>
     <p>{{ latest_entry.ai }}</p>
 </div>
 {% else %}
