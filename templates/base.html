@@ -29,7 +29,13 @@
     <div class="flash">{{ message }}</div>
     {% endfor %}
     <main>{% block content %}{% endblock %}<!-- page content goes here --></main>
-
+    <script>
+        document.querySelectorAll('.local-time').forEach(function (el) {
+            var utc = el.getAttribute('data-timestamp');
+            var date = new Date(utc);
+            el.textContent = date.toLocaleString();
+        });
+    </script>
 </body>
 
 </html>

@@ -2,11 +2,13 @@
 {% block title %}Entry - Clarity - Balance your worlds{% endblock %}
 {% block content %}
 <div class="entry-card">
-    <h2>{{ entry.created_at.strftime('%B %d, %Y') }}</h2>
+    <h2><span data-timestamp="{{ entry.created_at.strftime('%Y-%m-%dT%H:%M:%SZ') }}" class="local-time">{{
+            entry.created_at.strftime('%B %d, %Y') }}</span></h2>
     <div class="entry-meta">
         <span class="mode-badge">{{ entry.mode }}</span>
-        <span class="mood-badge">Mood: {{ entry.mood }}/10</span>
-        {{ entry.created_at.strftime('%I:%M %p') }}
+        <span class="mood-badge">Mood: {{ entry.mood }}1/10</span>
+        <span data-timestamp="{{ entry.created_at.strftime('%Y-%m-%dT%H:%M:%SZ') }}" class="local-time">{{
+            entry.created_at.strftime('%I:%M %p') }}</span>
     </div>
     <div class="entry-content">{{ entry.content }}</div>
     <a href="{{ url_for('edit_entry', id=entry.id) }}" class="btn">Edit Entry</a>
