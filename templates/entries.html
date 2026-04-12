@@ -11,8 +11,8 @@
     </div>
     <p class="entry-preview">{{ entry.content[:100] }}{% if entry.content|length > 100 %}...{% endif %}</p>
     <a href="{{ url_for('entry', id=entry.id) }}" class="btn">View Entry</a>
-</div>
+</div><br>
 {% else %}
-<p>No entries yet. <a href="{{ url_for('new_entry') }}">Start writing!</a></p>
+<p>No entries yet.<br> <a href="{{ url_for('new_entry') }}" class="btn">Start writing!</a></p>
 {% endfor %}
 {% endblock %}
