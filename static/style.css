@@ -210,3 +210,15 @@ textarea {
     margin: 0;
     padding: 0;
 }
+
+.tag-badge {
+    display: inline-block;
+    background-color: var(--sage);
+    color: var(--white);
+    padding: 3px 10px;
+    border-radius: 20px;
+    font-family: 'Nunito', sans-serif;
+    font-size: 0.8em;
+    font-weight: 700;
+    margin-right: 8px;
+}
