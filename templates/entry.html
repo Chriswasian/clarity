@@ -12,7 +12,9 @@
     </div>
     <div class="entry-content">{{ entry.content }}</div>
     {% if entry.tags %}
-    <span class="tag-badge">{{ entry.tags.split(',') | join('') }}</span>
+    {% for tag in entry.tags.split(',') %}
+    <span class="tag-badge">{{ tag }}</span>
+    {% endfor %}
     {% endif %}
     <a href="{{ url_for('edit_entry', id=entry.id) }}" class="btn">Edit Entry</a>
     <form method="POST" class="btn-danger-form" action="{{ url_for('delete_entry', id=entry.id) }}">
