@@ -27,6 +27,7 @@ class User(db.Model, UserMixin):
 class Entry(db.Model):
                 id = db.Column(db.Integer, primary_key=True)
                 content = db.Column(db.Text, nullable=False)
+                tags = db.Column(db.Text, nullable=True , default="")
                 mode = db.Column(db.String(10), default="Personal")
                 ai = db.Column(db.Text, nullable=True)
                 mood = db.Column(db.Integer, nullable=True)
@@ -87,6 +88,7 @@ def dashboard():
 def new_entry():
        if request.method == 'POST':
             content = request.form.get('content')
+            tags = request.form.get('tags')
             mode = request.form.get('mode')
             mood = request.form.get('mood')
             groq_client = Groq(api_key=os.getenv("GROQ_API_KEY"))
@@ -94,7 +96,7 @@ def new_entry():
             model="llama-3.1-8b-instant",
             messages=[{"role": "user", "content": f"You are Clarity, a warm and supportive AI journaling companion. The user wrote this journal entry (mode: {mode}, mood: {mood}/10): \"{content}\". Respond with a short, empathetic, thoughtful reflection in 2-3 sentences."}])
             ai_response = chat.choices[0].message.content
-            new_entry = Entry(content=content, mode=mode, mood=mood, ai=ai_response, user_id=current_user.id)
+            new_entry = Entry(content=content, tags=tags, mode=mode, mood=mood, ai=ai_response, user_id=current_user.id)
             db.session.add(new_entry)
             db.session.commit()
             return redirect(url_for('entry', id=new_entry.id))
