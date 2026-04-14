@@ -143,6 +143,15 @@ def entries():
        entries = Entry.query.filter_by(user_id=current_user.id).all()
        return render_template('entries.html', entries=entries)
 
+@app.route('/search', methods=['GET'])
+@login_required
+def search():
+       q = request.args.get('q')
+       entries = Entry.query.filter_by(user_id=current_user.id).filter(Entry.tags.contains(q)).all()
+       return render_template('search.html', entries=entries, q=q)
+
+
+
 if __name__ == '__main__':
     with app.app_context():
         db.create_all()
