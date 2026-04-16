@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+{% block title %}Search Results - Clarity{% endblock %}
+{% block content %}
+<h2>Search Results</h2>
+<p>Search for: {{ q }}</p>
+{% for entry in entries %}
+<div class="entry-card">
+    <div class="entry-meta">
+        <span class="mode-badge">{{ entry.mode }}</span>
+        <span class="mood-badge">Mood: {{ entry.mood }}/10</span>
+        <span data-timestamp="{{ entry.created_at.strftime('%Y-%m-%dT%H:%M:%SZ') }}" class="local-time">{{
+            entry.created_at.strftime('%B %d, %Y') }}</span>
+    </div>
+    <p class="entry-preview">{{ entry.content[:100] }}{% if entry.content|length > 100 %}...{% endif %}</p>
+    <a href="{{ url_for('entry', id=entry.id) }}" class="btn">View Entry</a>
+</div>
+{% else %}
+<p>No entries found.</p>
+{% endfor %}
+<p><a href="{{ url_for('new_entry') }}" class="btn">Start writing!</a></p>
+{% endblock %}
