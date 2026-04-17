@@ -222,3 +222,26 @@ textarea {
     font-weight: 700;
     margin-right: 8px;
 }
+
+.message.user {
+    text-align: right;
+    background-color: var(--brown-mid);
+    color: var(--white);
+    padding: 10px 24px;
+    border-radius: 8px;
+    margin: 8px 0;
+    margin-left: auto;
+    max-width: fit-content;
+}
+
+.message.assistant {
+    text-align: left;
+    font-style: italic;
+    background-color: var(--cream);
+    color: var(--text);
+    padding: 10px 24px;
+    border-radius: 8px;
+    margin: 8px 0;
+    margin-right: auto;
+    max-width: fit-content;
+}

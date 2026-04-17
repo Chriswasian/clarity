@@ -25,7 +25,9 @@
 </div>
 <div class="messages">
     {% for msg in messages %}
-    <div class="message {{ msg.role }}">{{ msg.content }}</div>
+    <div class="message {{ msg.role }}"><small>{% if msg.role == 'user' %}You{% else %}Clarity{% endif %}</small>
+        <p>{{ msg.content }}</p>
+    </div>
     {% endfor %}
     <form method="POST" action="{{ url_for('entry_chat', id=entry.id) }}">
         <input type="text" name="message" placeholder="Your message">

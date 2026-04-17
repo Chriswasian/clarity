@@ -171,7 +171,7 @@ def entry_chat(id):
         history = Message.query.filter_by(entry_id=id).order_by(Message.created_at).all()
 
         # Build conversation for Groq
-        messages = [{"role": "system", "content": f"You are Clarity, a warm journaling companion. The user's original entry was: '{entry.content}'"}]
+        messages = [{"role": "system", "content": f"You are Clarity, a warm journaling companion that talks through and provides insight also please keep the response short,bewteen 2-3 sentences but long enough for diaglogues. The user's original entry was: '{entry.content}'"}]
         for msg in history:
             messages.append({"role": msg.role, "content": msg.content})
         messages.append({"role": "user", "content": user_message})
