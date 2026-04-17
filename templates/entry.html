@@ -23,4 +23,13 @@
     </form>
     <div class="ai-response">{{ entry.ai }}</div>
 </div>
+<div class="messages">
+    {% for msg in messages %}
+    <div class="message {{ msg.role }}">{{ msg.content }}</div>
+    {% endfor %}
+    <form method="POST" action="{{ url_for('entry_chat', id=entry.id) }}">
+        <input type="text" name="message" placeholder="Your message">
+        <button type="submit">Send</button>
+    </form>
+</div>
 {% endblock %}

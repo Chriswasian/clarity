@@ -33,7 +33,14 @@ class Entry(db.Model):
                 mood = db.Column(db.Integer, nullable=True)
                 created_at = db.Column(db.DateTime, default=datetime.utcnow)
                 user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
-        
+
+class Message(db.Model):
+                id = db.Column(db.Integer, primary_key=True)
+                role = db.Column(db.String(10), nullable=False)
+                content = db.Column(db.Text, nullable=False)
+                entry_id = db.Column(db.Integer, db.ForeignKey('entry.id'), nullable=False) 
+                created_at = db.Column(db.DateTime, default=datetime.utcnow)  
+
 @login_manager.user_loader
 def load_user(user_id):
     return User.query.get(int(user_id))
@@ -108,7 +115,8 @@ def entry(id):
        entry = Entry.query.get_or_404(id)
        user_id = entry.user_id
        if user_id == current_user.id:
-              return render_template('entry.html', entry=entry)
+              messages = Message.query.filter_by(entry_id=id).order_by(Message.created_at).all()
+              return render_template('entry.html', entry=entry, messages=messages)
        else:
               flash('You do not have permission to view this entry')
               return redirect(url_for('dashboard'))
@@ -150,7 +158,35 @@ def search():
        entries = Entry.query.filter_by(user_id=current_user.id).filter(Entry.tags.contains(q)).all()
        return render_template('search.html', entries=entries, q=q)
 
+@app.route('/entry/<int:id>/chat', methods=['POST'])
+@login_required
+def entry_chat(id):
+        entry = Entry.query.get_or_404(id)
+        if entry.user_id != current_user.id:
+            return redirect(url_for('dashboard'))
 
+        user_message = request.form.get('message')
+
+        # Load previous messages for this entry
+        history = Message.query.filter_by(entry_id=id).order_by(Message.created_at).all()
+
+        # Build conversation for Groq
+        messages = [{"role": "system", "content": f"You are Clarity, a warm journaling companion. The user's original entry was: '{entry.content}'"}]
+        for msg in history:
+            messages.append({"role": msg.role, "content": msg.content})
+        messages.append({"role": "user", "content": user_message})
+
+        # Get Groq response
+        groq_client = Groq(api_key=os.getenv("GROQ_API_KEY"))
+        chat = groq_client.chat.completions.create(model="llama-3.1-8b-instant", messages=messages)
+        ai_reply = chat.choices[0].message.content
+
+        # Save both messages to DB
+        db.session.add(Message(role="user", content=user_message, entry_id=id))
+        db.session.add(Message(role="assistant", content=ai_reply, entry_id=id))
+        db.session.commit()
+
+        return redirect(url_for('entry', id=id))
 
 if __name__ == '__main__':
     with app.app_context():
