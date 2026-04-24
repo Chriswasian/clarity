@@ -49,14 +49,6 @@ class Message(db.Model):
                 entry_id = db.Column(db.Integer, db.ForeignKey('entry.id'), nullable=False) 
                 created_at = db.Column(db.DateTime, default=datetime.utcnow)  
 
-def send_otp_email(to_email, otp):
-    message = Mail(
-        from_email=app.config['MAIL_SENDER'],
-        to_emails=to_email,
-        subject='Your Clarity verification code',
-        html_content=f'<p>Your verification code is: <strong>{otp}</strong></p><p>This code expires in 10 minutes.</p>')
-    sg = SendGridAPIClient(app.config['SENDGRID_API_KEY'])
-    sg.send(message)
 
 @login_manager.user_loader
 def load_user(user_id):
@@ -95,9 +87,18 @@ def login():
                 session['otp'] = otp
                 session['otp_user_id'] = user.id
                 send_otp_email(user.email, otp)
-            return redirect(url_for('verify'))
-    flash('Invalid username or password')
+                return redirect(url_for('verify'))
+            flash('Invalid username or password')
     return render_template('login.html')
+
+def send_otp_email(to_email, otp):
+    message = Mail(
+        from_email=app.config['MAIL_SENDER'],
+        to_emails=to_email,
+        subject='Your Clarity verification code',
+        html_content=f'<p>Your verification code is: <strong>{otp}</strong></p><p>This code expires in 10 minutes.</p>')
+    sg = SendGridAPIClient(app.config['SENDGRID_API_KEY'])
+    sg.send(message)
 
 @app.route('/verify', methods=['GET', 'POST'])
 def verify():
