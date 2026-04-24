@@ -1,15 +1,23 @@
-from flask import Flask, render_template, request, redirect, url_for, flash
+from dotenv import load_dotenv
+load_dotenv()
+from flask import Flask, render_template, request, redirect, url_for, flash, session
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager, UserMixin, login_user, logout_user, login_required, current_user
 from werkzeug.security import generate_password_hash, check_password_hash
 import os
 from datetime import datetime
 from groq import Groq
+import random
+from sendgrid import SendGridAPIClient
+from sendgrid.helpers.mail import Mail
 
 app = Flask(__name__)
 
 app.config['SECRET_KEY'] = os.getenv('SECRET_KEY', 'clarity-dev-secret')
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///clarity.db'
+app.config['SENDGRID_API_KEY'] = os.getenv('SENDGRID_API_KEY')
+app.config['MAIL_SENDER'] = os.getenv('MAIL_SENDER')
+
 db = SQLAlchemy(app)
 with app.app_context():
     db.create_all()
@@ -41,6 +49,15 @@ class Message(db.Model):
                 entry_id = db.Column(db.Integer, db.ForeignKey('entry.id'), nullable=False) 
                 created_at = db.Column(db.DateTime, default=datetime.utcnow)  
 
+def send_otp_email(to_email, otp):
+    message = Mail(
+        from_email=app.config['MAIL_SENDER'],
+        to_emails=to_email,
+        subject='Your Clarity verification code',
+        html_content=f'<p>Your verification code is: <strong>{otp}</strong></p><p>This code expires in 10 minutes.</p>')
+    sg = SendGridAPIClient(app.config['SENDGRID_API_KEY'])
+    sg.send(message)
+
 @login_manager.user_loader
 def load_user(user_id):
     return User.query.get(int(user_id))
@@ -69,15 +86,34 @@ def register():
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
-        if request.method == 'POST':
+    if request.method == 'POST':
             username = request.form.get('username')
             password = request.form.get('password')
             user = User.query.filter_by(username=username).first()
             if user and check_password_hash(user.password, password):
-                login_user(user)
-                return redirect(url_for('dashboard'))
-            flash('Invalid username or password')
-        return render_template('login.html')
+                otp = str(random.randint(100000, 999999))
+                session['otp'] = otp
+                session['otp_user_id'] = user.id
+                send_otp_email(user.email, otp)
+            return redirect(url_for('verify'))
+    flash('Invalid username or password')
+    return render_template('login.html')
+
+@app.route('/verify', methods=['GET', 'POST'])
+def verify():
+    if request.method == 'POST':
+        entered_otp = request.form.get('otp')
+        if entered_otp == session.get('otp'):
+            user_id = session.get('otp_user_id')
+            user = User.query.get(user_id)
+            login_user(user)
+            session.pop('otp', None)
+            session.pop('otp_user_id', None)
+            return redirect(url_for('dashboard'))
+        else:
+            flash('Invalid code. Please try again.')
+    return render_template('verify.html')
+      
 
 @app.route('/logout')
 def logout():
