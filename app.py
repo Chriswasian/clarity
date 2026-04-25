@@ -91,6 +91,15 @@ def login():
             flash('Invalid username or password')
     return render_template('login.html')
 
+@app.route('/resend', methods=['POST']) 
+def resend():
+    user = User.query.get(session.get('otp_user_id'))
+    otp = str(random.randint(100000, 999999))
+    session['otp'] = otp
+    session['otp_user_id'] = user.id
+    send_otp_email(user.email, otp)
+    return redirect(url_for('verify'))
+
 def send_otp_email(to_email, otp):
     message = Mail(
         from_email=app.config['MAIL_SENDER'],
